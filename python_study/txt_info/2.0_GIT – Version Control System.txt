@@ -6,14 +6,21 @@ https://brew.sh/
 •	Устанавливаем сам git «$ brew install git»
 •	Далее установка с самого сайта git-scm
 
-Команды:	
+Команды:
+	Настройка git:
+	# задаем имя
+	git config --global user.name "ваше имя"
+	# задаем почту
+	git config --global user.email email@example.com
+
 	Команды выполняются из локальной папки проекта.
 •	Git init – создание локального репрозитория
-•	Git status – состояние файлов в папке
-•	Git add . – добавляет отслеживание всех файлов
+•	!Git status – состояние файлов в папке
+•	!Git add . – добавляет отслеживание всех файлов
 •	Git add name – добавляет отслеживание конкретного файла
 •	Git rm –cached name – удаляет отслеживание конкретного файла
-•	Git commit -m «name commit» - создать «слепок» состояния
+•	!Git commit -m «name commit» - создать «слепок» состояния
+	Git log - история коммитов с комментариями
 •	Git branch – информация о ветке
 •	Git branch name – создает новую ветку
 •	Git branch -D name – удаляет указанную ветку
