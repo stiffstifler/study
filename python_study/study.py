@@ -1,59 +1,47 @@
-# набор цифр в виде строки "0123456789"
-from string import digits
-# подтягиваем файл с базой скомпрометированных паролей и разбиваем ее по строкам
-with open('pass_base.txt', 'r') as f:
-    bad_pass_base = f.read().splitlines()
+# ООП 14 Пространство имен класса Class Body scope in Python
 
-class User:
-    # инициализируем нового пользователя
-    def __init__(self, login, password):
-        self.login = login
-        # тут вызывается свойство_1
-        self.password = password
-        # конф. информация доступная по паролю
-        self.__secret = "secret message"
+# глобальные переменные
+python_dev = 1
+go_dev = 1
+react_dev = 1
 
-    # проверка пароля для доступа к конф. информации
+class DepartmentIT:
+    # встроенные переменные
+    python_dev = 3
+    go_dev = 3
+    react_dev = 2
+
+    # у метода info нет доступа к встроенным переменным, только к глобальным и локальным
+    def info(self):
+        # локальные переменные
+        python_dev = 2
+        go_dev = 2
+        react_dev = 2
+        # обратится к локальным переменным, если их не будет - к глобальным
+        print("Было: " + python_dev, go_dev, react_dev)
+
+    # Обращаемся к встроенным переменным разными способами
+    def info(self): # через self
+        print(self.python_dev, self.go_dev, self.react_dev)
+
+    def info2(self): # через ИМЯ КЛАССА
+        print(DepartmentIT.python_dev, DepartmentIT.go_dev, DepartmentIT.react_dev)
+
     @property
-    def secret(self):
-        a = input("Введите Ваш пароль: ")
-        if a == self.password:
-            return self.__secret
-        else:
-            raise ValueError("Доступ закрыт!")
+    def info3(self): # через self и декоратор @property
+        print(self.python_dev, self.go_dev, self.react_dev)
 
-    # getter
-    @property
-    def password(self):
-        return self.__password
+    @classmethod
+    def info4(cls):  # через cls и декоратор @classmethod
+        print(cls.python_dev, cls.go_dev, cls.react_dev)
 
-    # проверка на наличие цифер в пароле
-    @staticmethod # не принимает self
-    def is_include_numder(password):
-        for digit in digits:
-            if digit in password:
-                return True
-        return False
+    @staticmethod
+    def info5():  # через ИМЯ КЛАССА и декоратор @staticmethod
+        print(DepartmentIT.python_dev, DepartmentIT.go_dev, DepartmentIT.react_dev)
 
-    # проверка на наличие пароля в базе скомпрометированных паролей "pass_base.txt"
-    @staticmethod # не принимает self
-    def check_bad_pass(password):
-        for i in bad_pass_base:
-            if i == password:
-                return False
-        return True
 
-    # setter
-    @password.setter
-    def password(self, value): # свойство_1
-        # проверка пароля на соответствие трбованиям
-        if not isinstance(value, str):
-            raise TypeError("Пароль должен быть строкой.")
-        if len(value) < 4 or len(value) > 12:
-            raise TypeError("Пароль должен содержать 3 - 12 символов.")
-        if not User.is_include_numder(value):
-            raise TypeError("Пароль должен содержать хотя бы одну цифру.")
-        if not User.check_bad_pass(value):
-            raise TypeError("Данный пароль был скомпрометирован.")
-        self.__password = value
-
+    def new_dev(self):
+        # self.python_dev - добавит и сохранит значение в ЭКЗЕМПЛЯРЕ КЛАССА
+        self.python_dev += 1
+        # DepartmentIT.python_dev - добавит и сохранит значение в ЭКЗЕМПЛЯРЕ КЛАССА
+        DepartmentIT.python_dev += 1
