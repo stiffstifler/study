@@ -335,8 +335,107 @@ class otrezok:
 
 ################################################################################################################################################
 
+# ООП 17 Магические методы __add__(сложение), __mul__(умножение), __sub__(вычитание) и __truediv__(деоенеие)
+
+class BankAccound:
+    # инициализируем объект
+    def __init__(self, name, balance):
+        self.name = name
+        self.balance = balance
+
+    # как объект будет отображаться внутри системы
+    def __repr__(self):
+        return f"Имя пользователя {self.name}, баланс пользователя {self.balance}"
+
+    # функция добавления баланса
+    def __add__(self, other):
+        # в виде числа
+        if isinstance(other,(float,int)):
+            # return self.balance + other - обычное добавление числа к балансу
+            return BankAccound(self.name, self.balance + other) # добавление с возможностью сохранения в новый объект
+
+        # в виде соржения 2 объектов
+        if isinstance(other,BankAccound):
+            return self.balance + other.balance
+
+        # вызываем ошибку в случае исключения
+        raise NoImplemented
+
+    # __radd__ - функция добавления баланса если значения поменяны местами
+    def __radd__(self, other):
+        return self+other
 
 
+
+################################################################################################################################################
+
+# ООП 18 Специальные методы сравнения объектов классов
+# __eq__ - отвечает за  ==
+# __ne__ - отвечает за  !=
+# __lt__ - отвечает за  <
+# __le__ - отвечает за  <=
+# __gt__ - отвечает за  >
+# __ge__ - отвечает за  >=
+
+# реализация всех 6 проверок доступка попарно с помощью 3х проверок:
+
+
+class Rectangle:
+    def __init__(self, a, b):
+        self.a = a
+        self.b = b
+
+    # высчитываем плодащь прямоугольника
+    @property
+    def area(self):
+        return self.a * self.b
+
+    # сравниваем прямоугольниики на равенство
+    def __eq__(self, other):
+        print("__eq__ called")
+        if isinstance (other, Rectangle):
+            return self.a == other.a and self.b == other.b
+
+    # сравниваем прямоугольники по площади
+    def __lt__(self, other):
+        if isinstance(other, Rectangle):
+            return self.area < other.area
+
+        if isinstance(other, (float, int)):
+            return self.area < other
+
+    # сравниваем прямоуголиники на <=
+    def __le__(self, other):
+        return self == other or self < other
+
+
+################################################################################################################################################
+
+# ООП 19 Магические методы __eq__ и __hash__. Dunder methods в Python
+# НЕХЕШИРУЕМЫЕ - изменяемые объекты, ХЕШИРУЕМЫЕ - неизменяемые.
+# __hash__ - возвращает хеш от заданного в функции объекта
+# p.s. полезно использовать функцию __hash__ для добавления объектов в качестве ключей словаря.
+
+class Point:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    # проверка равенства 2х объектов !ДЕЛАЕТ РЕЗУЛЬТАТ НЕХЕШИРУЕМЫМ!
+    def __eq__(self, other):
+        return isinstance(other, Point) \
+            and self.x == other.x and self.y == other.y
+
+    def __hash__(self):
+        return hash((self.x, self.y)) # считаем хэш от кортежа (self.x, self.y)
+
+
+# dict = {}
+# a = Point(3,4)
+# dict[a] = 100
+# станет dict = {<__main__.Point at 0x1075d01f0>: 100}
+
+################################################################################################################################################
 
 
 
