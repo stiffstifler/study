@@ -1,47 +1,59 @@
-# ООП 14 Пространство имен класса Class Body scope in Python
+# ООП 17 Магические методы __add__ (сложение), __mul__(умножение), __sub__(вычетание) и __truediv__(деление)
+# По примеру ниже можно использовать любой из методов.
 
-# глобальные переменные
-python_dev = 1
-go_dev = 1
-react_dev = 1
+class BankAccount:
+    # инициализируем клиента
+    def __init__(self, name, balance):
+        print("new object init")
+        self.name = name
+        self.balance = balance
 
-class DepartmentIT:
-    # встроенные переменные
-    python_dev = 3
-    go_dev = 3
-    react_dev = 2
+    # a = BankAccount("ivan", 500)
+    # при сложении баланса
+    # a.balance - выдаст "500", a.balance + 500 - выдаст "1000"
+    # при попытке сложения объекта с чем либо "a + 5" - выдаст ошибку
 
-    # у метода info нет доступа к встроенным переменным, только к глобальным и локальным
-    def info(self):
-        # локальные переменные
-        python_dev = 2
-        go_dev = 2
-        react_dev = 2
-        # обратится к локальным переменным, если их не будет - к глобальным
-        print("Было: " + python_dev, go_dev, react_dev)
+    # создаем возможность добавлять что либо к объекту
+    def __add__(self, other):
+        print("__add__ called")
+        # сложение с сторонним числом "b + 12"
+        if isinstance(other, (float, int)):
+            # return self.balance + other - добавит заданное значение без сохраннеия
+            return BankAccount(self.name, self.balance + other) # сохранит результат в новую переменную или обновит старую
+        # b = BankAccount("misha", 78)
+        # b + 12 - выдаст "90"
 
-    # Обращаемся к встроенным переменным разными способами
-    def info(self): # через self
-        print(self.python_dev, self.go_dev, self.react_dev)
+        # сложение с другим аккаунтом
+        if isinstance(other, BankAccount):
+            return self.balance + other.balance
+        # b = BankAccount("misha", 78)
+        # c = BankAccount("Vasya", 333)
+        # выведет "411"
 
-    def info2(self): # через ИМЯ КЛАССА
-        print(DepartmentIT.python_dev, DepartmentIT.go_dev, DepartmentIT.react_dev)
+        # сложение строки
+        if isinstance(other, str):
+            return self.name + other
 
-    @property
-    def info3(self): # через self и декоратор @property
-        print(self.python_dev, self.go_dev, self.react_dev)
+        # d = BankAccount("Bob", 555)
+        # d + " lol" - выдаст 'Bob lol'
 
-    @classmethod
-    def info4(cls):  # через cls и декоратор @classmethod
-        print(cls.python_dev, cls.go_dev, cls.react_dev)
+        # ошибка, в случае невыполнения ни одного из вариантов
+        raise NotImplemented
 
-    @staticmethod
-    def info5():  # через ИМЯ КЛАССА и декоратор @staticmethod
-        print(DepartmentIT.python_dev, DepartmentIT.go_dev, DepartmentIT.react_dev)
+    # __radd__ - позволяет складывать объект с числом стоящим спереди "12 + b"
+    def __radd__(self, other):
+        print("__radd__ called")
+        if isinstance(other, (float, int)):
+            return self + other
 
 
-    def new_dev(self):
-        # self.python_dev - добавит и сохранит значение в ЭКЗЕМПЛЯРЕ КЛАССА
-        self.python_dev += 1
-        # DepartmentIT.python_dev - добавит и сохранит значение в ЭКЗЕМПЛЯРЕ КЛАССА
-        DepartmentIT.python_dev += 1
+
+    # задаем отображение объекта внутри системы
+    def __repr__(self):
+        return f"Клиент {self.name}, с балансом {self.balance}"
+    # e = BankAccount("Ivan", 555)
+    # При вызове "e" выдаст - "Клиент Ivan, с балансом 555"
+
+
+
+
