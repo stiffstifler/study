@@ -1,0 +1,55 @@
+Docker
+
+Docker HUB - репозиторий с различными образами
+https://hub.docker.com/search?q=tomcat
+
+Команды:
+docker ps — показывает список запущенных контейнеров.
+-a / --all — список всех контейнеров (по умолчанию показывает только запущенные);
+-q / --quiet — перечислить только id контейнеров (полезно, когда вам нужны все контейнеры).
+
+docker images - список установленных образов
+docker search tomcat - поиск tomcat образа в docker hub из командной строки
+docker pull tomcat - скачать tomcat образа из docker hub без дальнейших действий
+docker commit id_контейнера name:tag_name - создание нового образа из существуюшего контейнера
+docker tag name:tag_name name:new_tag_name - создаем копию образа с другим именем tag(версии)
+docker run name_image - запустить image, если его нет - докер скачает и запустит
+docker stop — останавливает один и более контейнеров.
+docker stop $(docker ps -a -q) - остановит все запущенные контейнера.
+docker rmi name_image/id_image - удалить image по имени или id
+docker rm name_container - удалить контейнер
+docker rm $(docker ps -a -q) - удаляем все остановленные контейнеры
+docker rmi $(docker images -q) - удаляем все images
+
+docker run -d -p 1234:8080 tomcat - запуск контейнера с tomcat image
+-d - будет работать на фоне
+-it - (вместо - d) интерактивно (в реал тайме)
+-p 1234:8080 - перенаправление порта 8080 (по умолчанию) на 1234 (любой заданные мной)
+
+docker logs — просмотр логов указанного контейнера. 
+docker logs --follow my_container - следить за логами работающей программы
+
+docker exec -it id_контейнера /bin/bash - делаем логин в командную строку контейнера из носновного терминала
+
+
+
+ifconfig - мой ip 192.168.179.219 
+
+----------------------------------------------
+nano Dockerfile - создание своих конфигураций
+
+FROM имя_базового_образа:версия
+RUN команды для запуска
+	apt-get update
+	apt-get install -y python3
+
+WORKDIR /project - рабочая дериктория
+COPY ./app project/app - копирование_файлов
+ADD ссылка_на_файл путь_хранения
+CDM ["uvicorn", "main:app", "--host", "0.0.0.0"]
+	командаы при зап контейнера
+XPOSE 80 - открыть 80й порт
+
+docker build -t name путь	
+----------------------------------------------
+
